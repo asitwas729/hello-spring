@@ -1,10 +1,15 @@
 package hello.hellospring;
 
+import hello.hellospring.repository.JdbcMemberRepository;
+import hello.hellospring.repository.JdbcTemplateMemberRepository;
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
 import hello.hellospring.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 //DI(필드 주입, setter주입, 생성자 주입): 의존관계가 실행중에 동적으로 변하는 경우는 없으므로 "생성자 주입"을 사용한다.
 //상황에 따라 구현 클래스를 변경해야하면 설정을 통해 스프링 빈으로 등록한다.
@@ -14,6 +19,11 @@ import org.springframework.context.annotation.Configuration;
 //Java code로 직접 Spring Bean 등록하기
 @Configuration
 public class SpringConfig {
+  private DataSource dataSource;
+  @Autowired
+  public SpringConfig(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   @Bean
   public MemberService memberService(){
@@ -22,6 +32,8 @@ public class SpringConfig {
 
   @Bean
   public MemberRepository memberRepository(){ //->인터페이스
-    return new MemoryMemberRepository();  //->구현체(이 부분만 바꾸면 다른 코드를 아예 손대지않고 할수있다.
+    //return new MemoryMemberRepository();  //->구현체(이 부분만 바꾸면 다른 코드를 아예 손대지않고 할수있다.
+    //return  new JdbcMemberRepository(dataSource);
+    return new JdbcTemplateMemberRepository(dataSource);
   }
 }

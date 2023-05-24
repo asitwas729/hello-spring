@@ -19,4 +19,5 @@ public interface MemberRepository {
 
   //지금까지 저장된 모든 회원을 list으로 반환해줌
    List<Member> findAll();
+
 }

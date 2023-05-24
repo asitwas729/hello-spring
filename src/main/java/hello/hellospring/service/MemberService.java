@@ -29,7 +29,7 @@ public class MemberService {
 
 
 
-  @Autowired
+
 
 
   //회원가입
